@@ -1,20 +1,21 @@
 <template>
   <div class="result-search-page">
-      <div v-if="loading">
+      <div
+        v-if="loading"
+        class="loading-container"
+      >
+        <div uk-spinner />
         <p>Идет загрузка...</p>
       </div>
-      <template
+      <div
         v-else
         v-for="dataItem in searchResult"
+        class="uk-card uk-card-default uk-card-body custom-card"
+        :key="dataItem.id"
       >
-        <div
-          class="uk-card uk-card-default uk-card-body custom-card"
-          :key="dataItem.id"
-        >
-          <h3 class="uk-card-title custom-card-title">{{ dataItem.title }}</h3>
-          <p class="custom-card-body"> {{ dataItem.body }}</p>
-        </div>
-      </template>
+        <h3 class="uk-card-title custom-card-title">{{ dataItem.title }}</h3>
+        <p class="custom-card-body"> {{ dataItem.body }}</p>
+      </div>
   </div>
 </template>
 
@@ -43,6 +44,7 @@ export default class SearchResult extends Vue {
 </script>
 <style>
 .result-search-page {
+  min-height: 90vh;
   margin: 20px 60px;
   display: flex;
   justify-content: center;
@@ -69,5 +71,11 @@ export default class SearchResult extends Vue {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 </style>
