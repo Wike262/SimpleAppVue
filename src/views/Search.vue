@@ -28,6 +28,9 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import parsePhoneNumber from 'libphonenumber-js/max'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import UIkit from 'uikit/dist/js/uikit.min'
 
 @Component({ name: 'SearchPage' })
@@ -59,7 +62,7 @@ export default class Search extends Vue {
       },
       validation: (text: string): boolean => {
         const indexOfSpace = text.indexOf(' ')
-        return indexOfSpace > -1 && text.length > 3 && !/[^a-zA-Z0-9]/.test(text.replace(' ', ''))
+        return indexOfSpace > -1 && text.length > 3 && !/[^a-zA-Z0-9а-яА-Я]/.test(text.replace(' ', ''))
       }
     },
     {
@@ -74,11 +77,10 @@ export default class Search extends Vue {
     {
       searchType: 'phone',
       normalize: (text: string): string => {
-        return text.replace(/\D/g, '')
+        return parsePhoneNumber(text, 'RU')!.number.toString()
       },
       validation: (text: string): boolean => {
-        return /^[+]?[0-9]?[\s]?[(]?[0-9]{3}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{2,4}[-\s]?[0-9]{0,2}$/im
-          .test(text)
+        return !!parsePhoneNumber(text, 'RU')
       }
     },
     {
@@ -87,7 +89,7 @@ export default class Search extends Vue {
         return text[0] === '@' ? text : `@${text}`
       },
       validation: (text: string): boolean => {
-        return text.length > 2 && !/[^a-zA-Z0-9]/.test(text)
+        return text.length > 2 && !/[^@a-zA-Z0-9а-яА-я]/.test(text)
       }
     }
   ]
